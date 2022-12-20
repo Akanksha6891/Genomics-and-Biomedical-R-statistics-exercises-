@@ -1,0 +1,4 @@
+install.packages("devtools")
+options(timeout=300)
+devtools::install_github("compgenomr/compGenomRDAta")
+
