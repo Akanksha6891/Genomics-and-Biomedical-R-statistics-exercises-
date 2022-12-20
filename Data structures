@@ -1,0 +1,230 @@
+#Make a vector of 1,2,3,5 and 10 using c(), and assign it to the vec variable. Ex: vec1=c(1,3,4) makes a vector out of 1,3,4. [Difficulty: Beginner]
+> vec <- c(1,2,3,5,10)
+> vec
+[1]  1  2  3  5 10
+> 
+> #Check the length of your vector with length(). Ex: length(vec1) should return 3. [Difficulty: Beginner]
+> length(vec)
+[1] 5
+> 
+> #Make a vector of all numbers between 2 and 15. Ex: vec=1:6 makes a vector of numbers between 1 and 6, and assigns it to the vec variable. [Difficulty: Beginner]
+> vec <- c(2:15)
+> vec
+ [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+> 
+> #Make a vector of 4s repeated 10 times using the rep() function. Ex: rep(x=2,times=5) makes a vector of 2s repeated 5 times. [Difficulty: Beginner]
+> vec2 <- rep(x=4, times=10)
+> vec2
+ [1] 4 4 4 4 4 4 4 4 4 4
+> 
+> #Make a logical vector with TRUE, FALSE values of length 4, use c(). Ex: c(TRUE,FALSE). [Difficulty: Beginner]
+> vec3 <- c(TRUE, FALSE, TRUE, FALSE)
+> vec3
+[1]  TRUE FALSE  TRUE FALSE
+> length(vec3)
+[1] 4
+> 
+> #Make a character vector of the gene names PAX6,ZIC2,OCT4 and SOX2. Ex: avec=c("a","b","c") makes a character vector of a,b and c. [Difficulty: Beginner]
+> vec4 <- c("PAX6", "ZIC2", "OCT4", "SOX2")
+> vec4
+[1] "PAX6" "ZIC2" "OCT4" "SOX2"
+> 
+> #Subset the vector using [] notation, and get the 5th and 6th elements. Ex: vec1[1] gets the first element. vec1[c(1,3)] gets the 1st and 3rd elements. [Difficulty: Beginner]
+> myvec <- 1:10
+> myvec1 <- myvec[c(5,6)]
+> myvec1
+[1] 5 6
+> 
+> 
+> #You can also subset any vector using a logical vector in []. Run the following:
+> # the length of the logical vector should be equal to length(myvec)
+> myvec <- 1:5
+> myvec[c(TRUE,TRUE,FALSE,FALSE,FALSE)] 
+[1] 1 2
+> myvec[c(TRUE,FALSE,FALSE,FALSE,TRUE)]
+[1] 1 5
+> length(myvec)
+[1] 5
+> myvec
+[1] 1 2 3 4 5
+> #[Difficulty: Beginner]
+> 
+> #==,>,<, >=, <= operators create logical vectors. See the results of the following operations:
+>   myvec > 3
+[1] FALSE FALSE FALSE  TRUE  TRUE
+> myvec == 4
+[1] FALSE FALSE FALSE  TRUE FALSE
+> myvec <= 2
+[1]  TRUE  TRUE FALSE FALSE FALSE
+> myvec != 4
+[1]  TRUE  TRUE  TRUE FALSE  TRUE
+> #[Difficulty: Beginner]
+> 
+> #Use the > operator in myvec[ ] to get elements larger than 2 in myvec which is described above. [Difficulty: Beginner]
+> myvec[myvec>2]
+[1] 3 4 5
+> 
+> #Make a 5x3 matrix (5 rows, 3 columns) using matrix(). Ex: matrix(1:6,nrow=3,ncol=2) makes a 3x2 matrix using numbers between 1 and 6. [Difficulty: Beginner]
+> mat <- matrix(1:15, nrow=5, ncol=3)
+> 
+> #What happens when you use byrow = TRUE in your matrix() as an additional argument? Ex: mat=matrix(1:6,nrow=3,ncol=2,byrow = TRUE). [Difficulty: Beginner]
+> mat <- matrix(1:15, nrow=5, ncol=3, byrow=TRUE)
+> 
+> #Extract the first 3 columns and first 3 rows of your matrix using [] notation. [Difficulty: Beginner]
+> mat[1:3,1:3]
+     [,1] [,2] [,3]
+[1,]    1    2    3
+[2,]    4    5    6
+[3,]    7    8    9
+> 
+> #Extract the last two rows of the matrix you created earlier. Ex: mat[2:3,] or mat[c(2,3),] extracts the 2nd and 3rd rows. [Difficulty: Beginner]
+> mat[4:5,]
+     [,1] [,2] [,3]
+[1,]   10   11   12
+[2,]   13   14   15
+> 
+> #Extract the first two columns and run class() on the result. [Difficulty: Beginner]
+> result <- mat[,1:2]
+> result
+     [,1] [,2]
+[1,]    1    2
+[2,]    4    5
+[3,]    7    8
+[4,]   10   11
+[5,]   13   14
+> class (result)
+[1] "matrix" "array" 
+> 
+> #Extract the first column and run class() on the result, compare with the above exercise. [Difficulty: Beginner]
+> result2 <- mat[,1]
+> result2
+[1]  1  4  7 10 13
+> class(result2)
+[1] "integer"
+> 
+> #Make a data frame with 3 columns and 5 rows. Make sure first column is a sequence of numbers 1:5, and second column is a character vector. Ex: df=data.frame(col1=1:3,col2=c("a","b","c"),col3=3:1) # 3x3 data frame. Remember you need to make a 3x5 data frame. [Difficulty: Beginner]
+> num <- c(1:5)
+> planet <- c("mer","ven","earth","mars","jup")
+> col <- c("pink", "blue", "green", "yellow", "orange")
+> 
+> df<-data.frame(num, planet, col)
+> df
+  num planet    col
+1   1    mer   pink
+2   2    ven   blue
+3   3  earth  green
+4   4   mars yellow
+5   5    jup orange
+> 
+> #Extract the first two columns and first two rows. HINT: Use the same notation as matrices. [Difficulty: Beginner]
+> df[1:2, 1:2]
+  num planet
+1   1    mer
+2   2    ven
+> 
+> 
+> #Extract the last two rows of the data frame you made. HINT: Same notation as matrices. [Difficulty: Beginner]
+> df[4:5,]
+  num planet    col
+4   4   mars yellow
+5   5    jup orange
+> 
+> #Extract the last two columns using the column names of the data frame you made. [Difficulty: Beginner]
+> df[,2:3]
+  planet    col
+1    mer   pink
+2    ven   blue
+3  earth  green
+4   mars yellow
+5    jup orange
+> 
+> #Extract the second column using the column names. You can use [] or $ as in lists; use both in two different answers. [Difficulty: Beginner]
+> df[,c("planet")]
+[1] "mer"   "ven"   "earth" "mars"  "jup"  
+> df$planet
+[1] "mer"   "ven"   "earth" "mars"  "jup"  
+> 
+> #Extract rows where the 1st column is larger than 3. HINT: You can get a logical vector using the > operator , and logical vectors can be used in [] when subsetting. [Difficulty: Beginner]
+> df[df$num>3,]
+  num planet    col
+4   4   mars yellow
+5   5    jup orange
+> 
+> #Extract rows where the 1st column is larger than or equal to 3. [Difficulty: Beginner]
+> df[df$num>=3,]
+  num planet    col
+3   3  earth  green
+4   4   mars yellow
+5   5    jup orange
+> 
+> #Convert a data frame to the matrix. HINT: Use as.matrix(). Observe what happens to numeric values in the data frame. [Difficulty: Beginner]
+> mat <- as.matrix(df)
+> mat
+     num planet  col     
+[1,] "1" "mer"   "pink"  
+[2,] "2" "ven"   "blue"  
+[3,] "3" "earth" "green" 
+[4,] "4" "mars"  "yellow"
+[5,] "5" "jup"   "orange"
+> 
+> #Make a list using the list() function. Your list should have 4 elements; the one below has 2. Ex: mylist= list(a=c(1,2,3),b=c("apple,"orange")) [Difficulty: Beginner]
+> mylist <- list(a=c(1,2,3),b=c("rose","periwinkle","daffodile"),c=c(TRUE,TRUE,TRUE),d=c(6:8))
+> mylist
+$a
+[1] 1 2 3
+
+$b
+[1] "rose"       "periwinkle" "daffodile" 
+
+$c
+[1] TRUE TRUE TRUE
+
+$d
+[1] 6 7 8
+
+> 
+> #Select the 1st element of the list you made using $ notation. Ex: mylist$a selects first element named “a”. [Difficulty: Beginner]
+> mylist$a
+[1] 1 2 3
+> 
+> #Select the 4th element of the list you made earlier using $ notation. [Difficulty: Beginner]
+> mylist$d
+[1] 6 7 8
+> 
+> #Select the 1st element of your list using [ ] notation. Ex: mylist[1] selects the first element named “a”, and you get a list with one element. mylist["a"] selects the first element named “a”, and you get a list with one element. [Difficulty: Beginner]
+> mylist[1]
+$a
+[1] 1 2 3
+
+> 
+> #Select the 4th element of your list using [ ] notation. [Difficulty: Beginner]
+> mylist[4]
+$d
+[1] 6 7 8
+
+> 
+> #Make a factor using factor(), with 5 elements. Ex: fa=factor(c("a","a","b")). [Difficulty: Beginner]
+> fa=factor(c("ruby","diamond","sapphire","emerald", "pearl"))
+> fa
+[1] ruby     diamond  sapphire emerald  pearl   
+Levels: diamond emerald pearl ruby sapphire
+> class(fa)
+[1] "factor"
+> 
+> #Convert a character vector to a factor using as.factor(). First, make a character vector using c() then use as.factor(). [Difficulty: Intermediate]
+> 
+> chr<-c("stop", "pause", "play")
+> chr
+[1] "stop"  "pause" "play" 
+> class(chr)
+[1] "character"
+> chr2<-as.factor(chr)
+> class(chr2)
+[1] "factor"
+> 
+> #Convert the factor you made above to a character using as.character(). [Difficulty: Beginner]
+> 
+> chr3<-as.character(chr2)
+> class(chr3)
+[1] "character"
+> 
