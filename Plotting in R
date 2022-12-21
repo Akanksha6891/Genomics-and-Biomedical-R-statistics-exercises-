@@ -1,0 +1,109 @@
+#Please run the following code snippet for the rest of the exercises.
+> 
+> set.seed(1001)
+> x1=1:100+rnorm(100,mean=0,sd=15)
+> y1=1:100
+> 
+> 
+> #1.Make a scatter plot using the x1 and y1 vectors generated above. [Difficulty: Beginner]
+> plot(x1,y1)
+> 
+> #2.Use the main argument to give a title to plot() as in plot(x,y,main="title"). [Difficulty: Beginner]
+> plot(x1,y1,main="scatterplot of random samples")
+> 
+> #3.Use the xlab argument to set a label for the x-axis. Use ylab argument to set a label for the y-axis. [Difficulty: Beginner]
+> plot(x1,y1,main="scatterplot of random samples",
++      ylab="y values",xlab="x values")
+> 
+> 
+> #4.Once you have the plot, run the following expression in R console. mtext(side=3,text="hi there") does. HINT: mtext stands for margin text. [Difficulty: Beginner]
+> mtext(side=3,text="hi there")
+> 
+> 
+> #5.See what mtext(side=2,text="hi there") does. Check your plot after execution. [Difficulty: Beginner]
+> mtext(side=2,text="hi there")
+> 
+> #6.Use mtext() and paste() to put a margin text on the plot. You can use paste() as ‘text’ argument in mtext(). HINT: mtext(side=3,text=paste(...)). See how paste() is used for below. [Difficulty: Beginner/Intermediate]
+> 
+> 
+> 
+> mtext(side=1, text=paste("Text","here"))
+> 
+> ## [1] "Text here"
+> 
+> myText=paste("Text","here")
+> myText
+[1] "Text here"
+> ## [1] "Text here"
+> 
+> mtext(side=4, text=paste("Text","here"))
+> 
+> #7.cor() calculates the correlation between two vectors. Pearson correlation is a measure of the linear correlation (dependence) between two variables X and Y. Try using the cor() function on the x1 and y1 variables. [Difficulty: Intermediate]
+> cor(x1,y1)
+[1] 0.855402
+> 
+> 
+> #8.Try to use mtext(),cor() and paste() to display the correlation coefficient on your scatter plot. [Difficulty: Intermediate]
+> plot(x1, y1, main="scatterplot_2 of random samples", ylab="y values",xlab="x values")
+> mtext(side=4, text=paste("Correlation", "value"))
+> text(paste("Correlation:", round(cor(x1, y1), 2)), x = 0, y = 80)
+> 
+> #9.Change the colors of your plot using the col argument. Ex: plot(x,y,col="red"). [Difficulty: Beginner]
+> plot(x1, y1, col="hotpink")
+> 
+> #10.Use pch=19 as an argument in your plot() command. [Difficulty: Beginner]
+> plot(x1, y1, col="orange", pch=19)
+> 
+> #11.Use pch=18 as an argument to your plot() command. [Difficulty: Beginner]
+> plot(x1, y1, col="orange", pch=18)
+> 
+> #12.Make a histogram of x1 with the hist() function. A histogram is a graphical representation of the data distribution. [Difficulty: Beginner]
+> hist(x1)
+> 
+> #13.You can change colors with ‘col’, add labels with ‘xlab’, ‘ylab’, and add a ‘title’ with ‘main’ arguments. Try all these in a histogram. [Difficulty: Beginner]
+> 
+> hist(x1, main="First histogram", col="orchid", xlab="values", ylab= "times")
+> 
+> #14.Make a boxplot of y1 with boxplot().[Difficulty: Beginner]
+> boxplot(y1)
+> 
+> #15.Make boxplots of x1 and y1 vectors in the same plot.[Difficulty: Beginner]
+> boxplot(x1,y1)
+> 
+> #16.In boxplot, use the horizontal = TRUE argument. [Difficulty: Beginner]
+> boxplot(x1,y1, horizontal= TRUE)
+> 
+> #17.Make multiple plots with par(mfrow=c(2,1)). Run par(mfrow=c(2,1)). Make a boxplot.Make a histogram [Difficulty: Beginner/Intermediate]
+> par(mfrow=c(2,1))
+> hist(x1,main="Hello histogram!!!",col="lawngreen")
+> boxplot(x1,y1,main="boxplot",
++      ylab="y1 values",xlab="x1 values")
+> 
+> #18.Do the same as above but this time with par(mfrow=c(1,2)). [Difficulty: Beginner/Intermediate]
+> par(mfrow=c(1,2))
+> hist(x1,main="Hello histogram!!!",col="purple")
+> boxplot(x1,y1,main="boxplot",
++         ylab="y1 values",xlab="x1 values")
+> 
+> 
+> #19.Save your plot using the “Export” button in Rstudio. [Difficulty: Beginner]
+> 
+> #20. You can make a scatter plot showing the density of points rather than points themselves. If you use points it looks like this:
+>   
+> x2=1:1000+rnorm(1000,mean=0,sd=200)
+> y2=1:1000
+> plot(x2,y2,pch=19,col="blue")
+> 
+> 
+> #If you use the smoothScatter() function, you get the densities.
+> 
+> smoothScatter(x2,y2,
++               colramp=colorRampPalette(c("white","blue",
++                                                 "green","yellow","red"))) 
+>                                                 
+> 
+> #Now, plot with the colramp=heat.colors argument and then use a custom color scale using the following argument.
+> 
+> smoothScatter(x2,y2,pch=19,col=heat.colors(10))
+> smoothScatter(x2,y2,pch=19,colramp= colorRampPalette(c("white","blue", "green","yellow","red")))
+> 
