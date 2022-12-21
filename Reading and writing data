@@ -2,3 +2,172 @@ install.packages("devtools")
 options(timeout=300)
 devtools::install_github("compgenomr/compGenomRDAta")
 
+library (compGenomRData)
+> #Read CpG island (CpGi) data from the compGenomRData package CpGi.table.hg18.txt. This is a tab-separated file. Store it in a variable called cpgi. Use
+> cpgFilePath=system.file("extdata",
++                         "CpGi.table.hg18.txt",
++                         package="compGenomRData")
+> #to get the file path within the installed compGenomRData package.
+> 
+> 
+> cpgi=read.table(cpgFilePath,header=TRUE,sep="\t")
+> 
+> 
+> #Use head() on CpGi to see the first few rows
+> head(cpgi)
+  chrom chromStart chromEnd     name length cpgNum gcNum perCpg perGc obsExp
+1  chr1      18598    19673 CpG: 116   1075    116   787   21.6  73.2   0.83
+2  chr1     124987   125426  CpG: 30    439     30   295   13.7  67.2   0.64
+3  chr1     317653   318092  CpG: 29    439     29   295   13.2  67.2   0.62
+4  chr1     427014   428027  CpG: 84   1013     84   734   16.6  72.5   0.64
+5  chr1     439136   440407  CpG: 99   1271     99   777   15.6  61.1   0.84
+6  chr1     523082   523977  CpG: 94    895     94   570   21.0  63.7   1.04
+> 
+> 
+> 
+> #Why doesn’t the following work? See sep argument at help(read.table). Answer: THis doesn't work because the sep is set as "," and not as "\t" like earlier. 
+> cpgtFilePath=system.file("extdata",
++                          "CpGi.table.hg18.txt",
++                          package="compGenomRData")
+> cpgtFilePath
+[1] "C:/Users/akank/AppData/Local/R/win-library/4.2/compGenomRData/extdata/CpGi.table.hg18.txt"
+> cpgiSepComma=read.table(cpgtFilePath,header=TRUE,sep=",")
+> head(cpgiSepComma)
+  chrom.chromStart.chromEnd.name.length.cpgNum.gcNum.perCpg.perGc.obsExp
+1         chr1\t18598\t19673\tCpG: 116\t1075\t116\t787\t21.6\t73.2\t0.83
+2          chr1\t124987\t125426\tCpG: 30\t439\t30\t295\t13.7\t67.2\t0.64
+3          chr1\t317653\t318092\tCpG: 29\t439\t29\t295\t13.2\t67.2\t0.62
+4         chr1\t427014\t428027\tCpG: 84\t1013\t84\t734\t16.6\t72.5\t0.64
+5         chr1\t439136\t440407\tCpG: 99\t1271\t99\t777\t15.6\t61.1\t0.84
+6            chr1\t523082\t523977\tCpG: 94\t895\t94\t570\t21\t63.7\t1.04
+> 
+> #What happens when you set stringsAsFactors=FALSE in read.table()? Answer: We get an error. 
+> 
+> cpgiHF=read.table("C:/Users/akank/AppData/Local/R/win-library/4.2/compGenomRData/extdata/CpGi.table.hg18.txt",
++                     header=FALSE,sep="\t",
++                     stringsAsFactors=FALSE)
+> head(cpgiHf)
+Error in head(cpgiHf) : object 'cpgiHf' not found
+
+
+> #Read only the first 10 rows of the CpGi table.
+> cpgi[1:10,]
+   chrom chromStart chromEnd     name length cpgNum gcNum perCpg perGc obsExp
+1   chr1      18598    19673 CpG: 116   1075    116   787   21.6  73.2   0.83
+2   chr1     124987   125426  CpG: 30    439     30   295   13.7  67.2   0.64
+3   chr1     317653   318092  CpG: 29    439     29   295   13.2  67.2   0.62
+4   chr1     427014   428027  CpG: 84   1013     84   734   16.6  72.5   0.64
+5   chr1     439136   440407  CpG: 99   1271     99   777   15.6  61.1   0.84
+6   chr1     523082   523977  CpG: 94    895     94   570   21.0  63.7   1.04
+7   chr1     534601   536512 CpG: 171   1911    171  1405   17.9  73.5   0.67
+8   chr1     703847   704410  CpG: 60    563     60   385   21.3  68.4   0.92
+9   chr1     752279   753308 CpG: 115   1029    115   673   22.4  65.4   1.07
+10  chr1     778726   779074  CpG: 28    348     28   192   16.1  55.2   1.06
+>   
+> #Use cpgFilePath=system.file("extdata","CpGi.table.hg18.txt", package="compGenomRData") to get the file path, then use read.table() with argument header=FALSE. Use head() to see the results.
+> 
+> cpgFilePath=system.file("extdata","CpGi.table.hg18.txt", package="compGenomRData")
+> cpgi1 <- read.table(cpgFilePath, header=FALSE, sep="")
+Error in scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  : 
+  line 1 did not have 11 elements
+  
+  
+> #Write CpG islands to a text file called “my.cpgi.file.txt”. Write the file to your home folder; you can use file="~/my.cpgi.file.txt" in linux. ~/ denotes home folder.
+> 
+> write.table(cpgi1, file="C:/Users/akank/OneDrive/Documents/my.cpgi.file.txt")
+> 
+> 
+> #Same as above but this time make sure to use the quote=FALSE,sep="\t" and row.names=FALSE arguments. Save the file to “my.cpgi.file2.txt” and compare it with “my.cpgi.file.txt”.
+> 
+> write.table(cpgi1, file="C:/Users/akank/OneDrive/Documents/my.cpgi.file2.txt", quote=FALSE, sep="\t", row.names=FALSE)
+> 
+> 
+> #Write out the first 10 rows of the cpgi data frame. HINT: Use subsetting for data frames we learned before.
+> cpgi1[1:10,]
+      V1         V2       V3       V4     V5     V6    V7     V8    V9    V10
+1  chrom chromStart chromEnd     name length cpgNum gcNum perCpg perGc obsExp
+2   chr1      18598    19673 CpG: 116   1075    116   787   21.6  73.2   0.83
+3   chr1     124987   125426  CpG: 30    439     30   295   13.7  67.2   0.64
+4   chr1     317653   318092  CpG: 29    439     29   295   13.2  67.2   0.62
+5   chr1     427014   428027  CpG: 84   1013     84   734   16.6  72.5   0.64
+6   chr1     439136   440407  CpG: 99   1271     99   777   15.6  61.1   0.84
+7   chr1     523082   523977  CpG: 94    895     94   570     21  63.7   1.04
+8   chr1     534601   536512 CpG: 171   1911    171  1405   17.9  73.5   0.67
+9   chr1     703847   704410  CpG: 60    563     60   385   21.3  68.4   0.92
+10  chr1     752279   753308 CpG: 115   1029    115   673   22.4  65.4   1.07
+>   
+> #Write the first 3 columns of the cpgi data frame.Showing only first 10 rows for simplicity
+> cpgi1[1:10,1:3]
+      V1         V2       V3
+1  chrom chromStart chromEnd
+2   chr1      18598    19673
+3   chr1     124987   125426
+4   chr1     317653   318092
+5   chr1     427014   428027
+6   chr1     439136   440407
+7   chr1     523082   523977
+8   chr1     534601   536512
+9   chr1     703847   704410
+10  chr1     752279   753308
+>   
+> #Write CpG islands only on chr1. HINT: Use subsetting with [], feed a logical vector using == operator
+> write.table(cpgi1[cpgi1$V1 == "chr1", ], file="C:/Users/akank/OneDrive/Documents/my.cpgi.file3.txt", quote=FALSE, sep="\t", row.names=FALSE)
+> 
+>   
+> #Read two other data sets “rn4.refseq.bed” and “rn4.refseq2name.txt” with header=FALSE, and assign them to df1 and df2 respectively. They are again included in the compGenomRData package, and you can use the system.file() function to get the file paths.
+> refseqFilePath=system.file("extdata",
++                         "rn4.refseq.bed",
++                         package="compGenomRData")
+> df1= read.table(refseqFilePath, header = FALSE)
+> 
+> refseq2nameFilePath=system.file("extdata",
++                            "rn4.refseq2name.txt",
++                            package="compGenomRData")
+> df2= read.table(refseq2nameFilePath, header = FALSE)
+> 
+> 
+> #Use head() to see what is inside the data frames above.
+> head(df1)
+    V1        V2        V3           V4 V5 V6        V7        V8 V9 V10                                                                        V11
+1 chr1 133925506 134302139 NM_001270655  0  - 133925682 134302088  0  18         362,159,42,244,173,131,189,103,65,24,297,142,143,158,69,72,75,299,
+2 chr1 133925506 134302139    NM_019248  0  - 133925682 134302088  0  17            362,159,244,173,131,189,103,65,24,297,142,143,158,69,72,75,299,
+3 chr1 133925506 134302139 NM_001270656  0  - 133925682 134302088  0  19      362,159,42,75,244,173,131,189,103,65,24,297,142,143,158,69,72,75,299,
+4 chr1 109047398 109277756    NM_017065  0  + 109047398 109277253  0   8                                              94,68,221,83,138,153,245,845,
+5 chr1  99805921 100758002    NM_031069  0  +  99805979 100757606  0  20 113,129,21,171,97,73,83,135,103,74,100,129,126,123,96,141,194,177,225,447,
+6 chr1  83873577  83896121 NM_001008368  0  +  83878366  83895596  0  15                         418,49,114,42,107,57,69,130,60,56,77,52,71,67,675,
+                                                                                                                                    V12
+1                   0,7463,12607,52937,56395,65765,155928,243845,244836,247109,253250,253995,254526,255726,271163,312060,312864,376334,
+2                         0,7463,52937,56395,65765,155928,243845,244836,247109,253250,253995,254526,255726,271163,312060,312864,376334,
+3             0,7463,12607,34059,52937,56395,65765,155928,243845,244836,247109,253250,253995,254526,255726,271163,312060,312864,376334,
+4                                                                                      0,290,169006,190961,194261,216984,221138,229513,
+5 0,8713,167962,220742,259227,310308,311027,320653,321884,333564,344390,363454,529322,641329,755627,914417,935329,942335,944485,951634,
+6                                                  0,4741,5033,10409,10551,10744,12328,17086,19398,19674,19814,19972,21540,21719,21869,
+> head(df2)
+            V1     V2
+1 NM_001270655  Ntrk3
+2    NM_019248  Ntrk3
+3 NM_001270656  Ntrk3
+4    NM_017065 Gabrb3
+5    NM_031069  Nell1
+6 NM_001008368  Sirt2
+>   
+> #Merge data sets using merge() and assign the results to a variable named ‘new.df’, and use head() to see the results.
+
+> new.df = merge(df1, df2, all = TRUE)
+> new.df[is.na(new.df)]<-0
+> head (new.df)
+    V1        V2        V3           V4 V5 V6        V7        V8 V9 V10                                             V11
+1 chr1 100482037 100483507 NM_001103363  0  + 100482070 100483258  0   1                                           1470,
+2 chr1   1009411   1021923 NM_001099460  0  +   1009411   1021923  0   6                        206,283,804,225,124,884,
+3 chr1 101425974 101466023    NM_053427  0  + 101426436 101464264  0  12 548,253,119,115,88,87,143,150,133,111,128,2095,
+4 chr1 101697264 101798495 NM_001127504  0  + 101697363 101797483  0   7                    247,122,142,64,142,108,1231,
+5 chr1 101803004 101808694 NM_001271084  0  - 101803831 101808573  0   4                                 842,111,51,175,
+6 chr1 101818826 101822727 NM_001195599  0  - 101818970 101822711  0   4                                  153,105,45,61,
+                                                                 V12
+1                                                                 0,
+2                                      0,6524,7232,8886,10339,11628,
+3 0,3294,4890,20953,22131,23882,26857,30425,35048,36464,36938,37954,
+4                             0,9425,33100,43255,50933,58282,100000,
+5                                                  0,3263,3770,5515,
+6                                                  0,1677,3052,3840,
+> 
