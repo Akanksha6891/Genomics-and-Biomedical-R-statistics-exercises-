@@ -1,0 +1,158 @@
+#Relationship between variables: Linear models and correlation
+> #Below we are going to simulate X and Y values that are needed for the rest of the exercise.
+> # set random number seed, so that the random numbers from the text is the same when you run the code.
+> 
+> #1.Run the code then fit a line to predict Y based on X. [Difficulty:Intermediate]
+> set.seed(32)
+> x = runif(50,1,100)  # get 50 X values between 1 and 100
+> b0 = 10   # set b0,b1 and variance (sigma)
+> b1 = 2
+> sigma = 20
+> eps = rnorm(50,0,sigma)  # simulate error terms from normal distribution
+> y = b0 + b1*x+ eps   # get y values from the linear equation and addition of error terms
+> 
+> 
+> #2. Plot the scatter plot and the fitted line. [Difficulty:Intermediate]
+> mod1=lm(y~x)
+> 
+> # plot the data points
+> plot(x,y,pch=20)
+> # plot the linear fit
+> abline(mod1,col="brown")
+> 
+> #3. Calculate correlation and R^2. [Difficulty:Intermediate]
+> cor(x,y) # pearson cor
+[1] 0.9511939
+> cor(x,y)^2 # R squared
+[1] 0.9047699
+> 
+> 
+> #4. Run the summary() function and try to extract P-values for the model from the object returned by summary. See ?summary.lm. [Difficulty:Intermediate/Advanced]
+> 
+> summary(lm(y~x))
+
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-38.50 -12.62   1.66  14.26  37.20 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.40951    6.43208   0.064     0.95    
+x            2.08742    0.09775  21.355   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 16.96 on 48 degrees of freedom
+Multiple R-squared:  0.9048,	Adjusted R-squared:  0.9028 
+F-statistic:   456 on 1 and 48 DF,  p-value: < 2.2e-16
+
+> 
+> #5.Plot the residuals vs. the fitted values plot, by calling the plot() function with which=1 as the second argument. First argument is the model returned by lm(). [Difficulty:Advanced]
+> mod=lm(y~x)
+> plot(mod,which=1)
+> 
+> #6. For the next exercises, read the data set histone modification data set. Use the following to get the path to the file:
+> 
+> hmodFile=system.file("extdata", "HistoneModeVSgeneExp.rds", package="compGenomRData")
+> 
+> #There are 3 columns in the dataset. These are measured levels of H3K4me3, H3K27me3 and gene expression per gene. Once you read in the data, plot the scatter plot for H3K4me3 vs. expression. [Difficulty:Beginner]
+> 
+> hismod <- read.table(hmodFile, header = FALSE)
+Warning messages:
+1: In read.table(hmodFile, header = FALSE) :
+  line 2 appears to contain embedded nulls
+2: In read.table(hmodFile, header = FALSE) :
+  line 4 appears to contain embedded nulls
+3: In scan(file = file, what = what, sep = sep, quote = quote, dec = dec,  :
+  embedded nul(s) found in input
+> hdat=readRDS(hmodFile) 
+> plot(hdat$H3k4me3, hdat$measured_log2, col=heat.colors(10), pch=22)
+> 
+> 
+> #7.Plot the scatter plot for H3K27me3 vs. expression. [Difficulty:Beginner]
+> 
+> plot(hdat$H3k27me3, hdat$measured_log2, col=terrain.colors(10), pch=17)
+> 
+> #8.Fit the model for prediction of expression data using: 1) Only H3K4me3 as explanatory variable, 2) Only H3K27me3 as explanatory variable, and 3) Using both H3K4me3 and H3K27me3 as explanatory variables. Inspect the summary() function output in each case, which terms are significant. [Difficulty:Beginner/Intermediate]
+> 
+> mod1=lm(measured_log2~H3k4me3,data=hdat)
+> mod2=lm(measured_log2~H3k27me3,data=hdat)
+> mod3=lm(measured_log2~H3k4me3+H3k27me3,data=hdat)
+> 
+> summary(mod1)
+
+Call:
+lm(formula = measured_log2 ~ H3k4me3, data = hdat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-11.0503  -1.0218  -0.1054   1.2508  11.2229 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -9.68153    0.05853  -165.4   <2e-16 ***
+H3k4me3      2.33263    0.01457   160.1   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.565 on 13729 degrees of freedom
+Multiple R-squared:  0.6511,	Adjusted R-squared:  0.6511 
+F-statistic: 2.563e+04 on 1 and 13729 DF,  p-value: < 2.2e-16
+
+> summary(mod2)
+
+Call:
+lm(formula = measured_log2 ~ H3k27me3, data = hdat)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.8885 -4.0716 -0.5573  3.8014 12.9216 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -0.36390    0.04394  -8.282   <2e-16 ***
+H3k27me3    -0.78807    0.03117 -25.283   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.245 on 13729 degrees of freedom
+Multiple R-squared:  0.04449,	Adjusted R-squared:  0.04442 
+F-statistic: 639.2 on 1 and 13729 DF,  p-value: < 2.2e-16
+
+> summary(mod3)
+
+Call:
+lm(formula = measured_log2 ~ H3k4me3 + H3k27me3, data = hdat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-11.0564  -1.0702  -0.3066   1.2486  10.8950 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -9.11803    0.05980 -152.48   <2e-16 ***
+H3k4me3      2.29815    0.01417  162.17   <2e-16 ***
+H3k27me3    -0.54532    0.01832  -29.77   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.486 on 13728 degrees of freedom
+Multiple R-squared:  0.6723,	Adjusted R-squared:  0.6723 
+F-statistic: 1.408e+04 on 2 and 13728 DF,  p-value: < 2.2e-16
+
+> 
+> #9. Is using H3K4me3 and H3K27me3 better than the model with only H3K4me3? [Difficulty:Intermediate]
+> 
+> # When both histone marks are used the R-squared values were slightly better compared to just using H3K4me3.
+> 
+> #10. Plot H3k4me3 vs. H3k27me3. Inspect the points that do not follow a linear trend. Are they clustered at certain segments of the plot? Bonus: Is there any biological or technical interpretation for those points? [Difficulty:Intermediate/Advanced]
+> 
+> smoothScatter(hdat$H3k4me3, hdat$H3k27me3, col="darkorange", pch=19)
+> cor(hdat$H3k4me3, hdat$H3k27me3)
+[1] -0.08172523
+> 
+> #There is a negative correlation (-0.08) between the two histone marks
+> 
