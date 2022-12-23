@@ -1,0 +1,162 @@
+#1.Calculate the means and variances of the rows of the following simulated data set, and plot the distributions of means and variances using hist() and boxplot() functions. [Difficulty: Beginner/Intermediate]
+> set.seed(100)
+> 
+> #sample data matrix from normal distribution
+> gset=rnorm(600,mean=200,sd=70)
+> data=matrix(gset,ncol=6)
+> 
+> mean(data)
+[1] 199.2536
+> var(data)
+           [,1]       [,2]       [,3]      [,4]       [,5]      [,6]
+[1,] 5105.06332  -537.9075   555.0969  208.2538  -10.12233 -320.0184
+[2,] -537.90747  3106.1913 -1078.8305  334.7691 -410.91633   70.4860
+[3,]  555.09693 -1078.8305  5292.5404 -619.0729  793.61834 -530.0580
+[4,]  208.25384   334.7691  -619.0729 5724.4751 -533.96152  396.6992
+[5,]  -10.12233  -410.9163   793.6183 -533.9615 5626.88384  781.7876
+[6,] -320.01841    70.4860  -530.0580  396.6992  781.78756 5329.2831
+> hist(data)
+> boxplot(data)
+> 
+> #2. Using the data generated above, calculate the standard deviation of the distribution of the means using the sd() function. Compare that to the expected standard error obtained from the central limit theorem keeping in mind the population parameters were σ=70 and  n=6
+> 
+> sd(data)
+[1] 70.85806
+> alpha=0.05
+> sd=70
+> n=6
+> expstderr=mean(data)+qnorm(c(alpha/2,1-alpha/2))*sd/sqrt(n)
+> expstderr
+[1] 143.2429 255.2642
+> 
+> #How does the estimate from the random samples change if we simulate more data with following: ? [Difficulty: Beginner/Intermediate]
+> 
+> data_2=matrix(rnorm(6000,mean=200,sd=70),ncol=6)
+> 
+> sd(data_2)
+[1] 69.65229
+> alpha=0.05
+> sd=70
+> n=6
+> expstderr_2=mean(data_2)+qnorm(c(alpha/2,1-alpha/2))*sd/sqrt(n)
+> expstderr_2
+[1] 144.4504 256.4717
+> 
+> 
+> #3. Simulate 30 random variables using the rpois() function. Do this 1000 times and calculate the mean of each sample. Plot the sampling distributions of the means using a histogram. Get the 2.5th and 97.5th percentiles of the distribution. [Difficulty: Beginner/Intermediate]
+> library(mosaic)
+> set.seed(100)
+> gene1=rpois(30, 5)
+> gene2=rpois(30, 5)
+> org.diff=mean(gene1)-mean(gene2)
+> gene.df=data.frame(exp=c(gene1,gene2),
++                    group=c( rep("test",30),rep("control",30) ) )
+> 
+> 
+> exp.null <- do(1000) * diff(mosaic::mean(exp ~ shuffle(group), data=gene.df))
+> hist(exp.null[,1],xlab="null distribution | no difference in samples",
++      main=expression(paste(H[0]," :no difference in means") ),
++      xlim=c(-2,2),col="cornflowerblue",border="white")
+> abline(v=quantile(exp.null[,1],0.95),col="red" )
+> abline(v=org.diff,col="blue" )
+> text(x=quantile(exp.null[,1],0.95),y=200,"0.05",adj=c(1,0),col="red")
+> text(x=org.diff,y=200,"org. diff.",adj=c(1,0),col="blue")
+> 
+> #4. Use the t.test() function to calculate confidence intervals of the mean on the first random sample pois1 simulated from the rpois() function below. [Difficulty: Intermediate]
+> 
+> #HINT
+> set.seed(100)
+> 
+> #sample 30 values from poisson dist with lamda paramater =30
+> pois1=rpois(30,lambda=5)
+> stats::t.test(pois1)
+
+	One Sample t-test
+
+data:  pois1
+t = 17.663, df = 29, p-value < 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 4.362104 5.504563
+sample estimates:
+mean of x 
+ 4.933333 
+
+> 
+> #5. Use the bootstrap confidence interval for the mean on pois1. [Difficulty: Intermediate/Advanced]'
+> boot.means=do(1000) * mean(resample(pois1))
+> q=quantile(boot.means[,1],p=c(0.025,0.975))
+> 
+> hist(boot.means[,1],col="cornflowerblue",border="white",
++      xlab="sample means")
+> abline(v=c(q[1], q[2] ),col="red")
+> text(x=q[1],y=200,round(q[1],3),adj=c(1,0))
+> text(x=q[2],y=200,round(q[2],3),adj=c(0,0))
+> 
+> #.6 Compare the theoretical confidence interval of the mean from the t.test and the bootstrap confidence interval. Are they similar? [Difficulty: Intermediate/Advanced]
+> 
+> #t.test values : 4.36 5.50
+> #bootstrap values: 4.4 5.47
+> 
+> #.7 Try to re-create the following figure, which demonstrates the CLT concept.[Difficulty: Advanced]
+> set.seed(100)
+> require(mosaic)
+> par(mfcol=c(4,3))
+> par(mar=c(5.1-2,4.1-1,4.1,2.1-2))
+> d=c(rnorm(1000,mean=10,sd=8))
+> hist(d,main="",
++      col="black",border="white",breaks=20,xlab="",ylab=""
++ )
+> abline(v=mean(d),col="red")
+> mtext(expression(paste(mu,"=10")),cex=0.6)
+> mtext("normal",cex=0.8,line=1)
+> 
+> bimod10=rowMeans(do(1000)*rnorm(5,mean=10,sd=8))
+> bimod30=rowMeans(do(1000)*rnorm(15,mean=10,sd=8))
+> bimod100=rowMeans(do(1000)*rnorm(50,mean=10,sd=8))
+> hist(bimod10,xlim=c(0,20),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> mtext("n=10",side=2,cex=0.8,line=2)
+> hist(bimod30,xlim=c(0,20),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> mtext("n=30",side=2,cex=0.8,line=2)
+> hist(bimod100,xlim=c(0,20),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> mtext("n=100",side=2,cex=0.8,line=2)
+> 
+> d=rexp(1000)
+> hist(d,main="",
++      col="black",border="white",breaks=20,xlab="",ylab=""
++ )
+> abline(v=mean(d),col="red")
+> mtext(expression(paste(mu,"=1")),cex=0.6)
+> mtext("exponential",cex=0.8,line=1)
+> mtext("Distributions of different populations",line=2)
+> exp10 =rowMeans(do(2000)*rexp(10))
+> exp30 =rowMeans(do(2000)*rexp(30))
+> exp100=rowMeans(do(2000)*rexp(100))
+> hist(exp10,xlim=c(0,2),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> mtext("Sampling distribution of sample means",line=2)
+> hist(exp30,xlim=c(0,2),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> hist(exp100,xlim=c(0,2),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> 
+> d=runif(1000)
+> hist(d,main="",
++      col="black",border="white",breaks=20,xlab="",ylab=""
++ )
+> abline(v=mean(d),col="red")
+> mtext(expression(paste(mu,"=0.5")),cex=0.6)
+> mtext("uniform",cex=0.8,line=1)
+> unif10 =rowMeans(do(1000)*runif(10))
+> unif30 =rowMeans(do(1000)*runif(30))
+> unif100=rowMeans(do(1000)*runif(100))
+> hist(unif10,xlim=c(0,1),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> hist(unif30,xlim=c(0,1),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> hist(unif100,xlim=c(0,1),main="",xlab="",ylab="",breaks=20,col="gray",
++      border="gray")
+> 
