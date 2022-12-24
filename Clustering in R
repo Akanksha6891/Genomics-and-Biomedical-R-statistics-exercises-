@@ -1,0 +1,101 @@
+#Clustering
+#1.We want to observe the effect of data transformation in this exercise. Scale the expression matrix with the scale() function. In addition, try taking the logarithm of the data with the log2() function prior to scaling. Make box plots of the unscaled and scaled data sets using the boxplot() function. [Difficulty: Beginner/Intermediate]
+expFile=system.file("extdata",
+                    "leukemiaExpressionSubset.rds",
+                    package="compGenomRData")
+xmat=readRDS(expFile)
+sc1=scale(xmat)
+
+log2_xmat=log2(xmat)
+sc2=scale(log2_xmat)
+
+boxplot(xmat, main="unscaled data")
+boxplot(sc1, main= "scaled data")
+boxplot(sc2, main="scaled log2 data")
+
+
+#2. For the same problem above using the unscaled data and different data transformation strategies, use the ward.d distance in hierarchical clustering and plot multiple heatmaps. You can try to use the pheatmap library or any other library that can plot a heatmap with a dendrogram. Which data-scaling strategy provides more homogeneous clusters with respect to disease types? [Difficulty: Beginner/Intermediate]
+
+dim(xmat)
+xmat[1:5, 1:5]
+
+
+library(dplyr)
+#data transformation using correlation
+xmat.cor <- cor(xmat, use="pairwise.complete.obs") 
+xmat.dist <- as.dist(1 - xmat.cor)
+xmat.tree <- hclust(xmat.dist, method="complete")
+plot(xmat.tree)
+plot(xmat.tree, cex=0.2) #altering the text size
+
+xmat.tree2 <- hclust(xmat.dist, method="ward.D")
+plot(xmat.tree2, cex=0.2, main="ward.D method")
+
+xmat.tree2 <- hclust(xmat.dist, method="ward.D2")
+plot(xmat.tree2, cex=0.2,  main="ward.D2 method")
+
+
+library(pheatmap)
+annotation_col = data.frame(
+  LeukemiaType =substr(colnames(xmat),1,3))
+rownames(annotation_col)=colnames(xmat)
+
+
+pheatmap(xmat,show_rownames=FALSE,show_colnames=FALSE,
+         annotation_col=annotation_col,
+         scale = "none",clustering_method="ward.D2",
+         clustering_distance_cols="euclidean")
+
+
+
+
+
+#Editing dendrogram. This is not included in the exercise.
+
+library(dendextend)
+xmat.dend <- as.dendrogram(xmat.tree) # create dendrogram object
+nleaves(xmat.dend)
+nnodes(xmat.dend)
+
+plot(xmat.dend, leaflab = "none")
+
+clusters <- cutree(xmat.dend, k=4)
+table(clusters)
+
+plot(color_branches(xmat.dend, k=4),leaflab="none")
+
+clusters <- cutree(xmat.dend, k=8, order_clusters_as_data = FALSE)
+table(clusters)
+
+plot(color_branches(xmat.dend, k=8),leaflab="none")
+
+
+#3. For the transformed and untransformed data sets used in the exercise above, use the silhouette for deciding number of clusters using hierarchical clustering. [Difficulty: Intermediate/Advanced]
+
+library(cluster)
+set.seed(101)
+pamclu=cluster::pam(t(xmat),k=5)
+plot(silhouette(pamclu),main=NULL)
+
+Ks=sapply(2:7,
+          function(i) 
+            summary(silhouette(pam(t(xmat),k=i)))$avg.width)
+plot(2:7,Ks,xlab="k",ylab="av. silhouette",type="b",
+     pch=19)
+
+#In this case, it seems the best value for  k is 4. The k-medoids function pam() will usually cluster CML and “no Leukemia” cases together when k=4, which are also related clusters according to the hierarchical clustering we did earlier.
+
+
+#4. Now, use the Gap Statistic for deciding the number of clusters in hierarchical clustering. Is it the same number of clusters identified by two methods? Is it similar to the number of clusters obtained using the k-means algorithm in the chapter. [Difficulty: Intermediate/Advanced]
+
+library(cluster)
+set.seed(101)
+# define the clustering function
+pam1 <- function(x,k) 
+  list(cluster = pam(x,k, cluster.only=TRUE))
+
+# calculate the gap statistic
+pam.gap= clusGap(t(xmat), FUN = pam1, K.max = 8,B=50)
+
+# plot the gap statistic accross k values
+plot(pam.gap, main = "Gap statistic for the 'Leukemia' data")
